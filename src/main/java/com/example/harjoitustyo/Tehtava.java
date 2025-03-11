@@ -23,7 +23,10 @@ public class Tehtava implements Serializable {
         this.valmis = false;
     }
 
-    public void setValmis() {
+    /**
+     * Asettaa tehtävän valmiiksi ja rekisteröi valmistumispäivän
+     */
+    public void teeValmiiksi() {
         this.valmis = true;
         this.valmistumisPaiva = LocalDate.now();
     }
