@@ -1,30 +1,31 @@
 package com.example.harjoitustyo;
 
-import java.util.Date;
+import java.io.Serializable;
+import java.time.LocalDate;
 
-public class Tehtava {
+public class Tehtava implements Serializable {
     private static int idCounter = 0;
 
     private final int id;
     private String otsikko;
     private String kuvaus;
-    private final Date luontiPaiva;
-    private final Date deadline;
-    private Date valmistumisPaiva;
+    private final LocalDate luontiPaiva;
+    private final LocalDate deadline;
+    private LocalDate valmistumisPaiva;
     private boolean valmis;
 
-    public Tehtava(String otsikko, String kuvaus, Date deadline) {
+    public Tehtava(String otsikko, String kuvaus, LocalDate deadline) {
         this.id = idCounter++;
         this.otsikko = otsikko;
         this.kuvaus = kuvaus;
-        this.luontiPaiva = new Date();
+        this.luontiPaiva = LocalDate.now();
         this.deadline = deadline;
         this.valmis = false;
     }
 
     public void setValmis() {
         this.valmis = true;
-        this.valmistumisPaiva = new Date();
+        this.valmistumisPaiva = LocalDate.now();
     }
 
     public int getId() {
@@ -39,15 +40,15 @@ public class Tehtava {
         return kuvaus;
     }
 
-    public Date getLuontiPaiva() {
+    public LocalDate getLuontiPaiva() {
         return luontiPaiva;
     }
 
-    public Date getDeadline() {
+    public LocalDate getDeadline() {
         return deadline;
     }
 
-    public Date getValmistumisPaiva() {
+    public LocalDate getValmistumisPaiva() {
         return valmistumisPaiva;
     }
 

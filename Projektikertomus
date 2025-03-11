@@ -1,3 +1,7 @@
 10.3.2025 90min
 Suunnitelin ohjelman käsittelemää olio-luokkaa, tein GitHub projektin, sekä ensimmäisen version Tehtava-luokasta. 
 Hahmottelin myös luokkaa, joka hoitaa tehtävien tallentamisen ja lukemisen tiedostosta.
+
+11.3. 15min
+Muokattu tehtävä luokkaa käyttämään LocalDatea Daten sijaan ja lisätty Serializable rajapinta
+
