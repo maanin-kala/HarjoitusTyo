@@ -24,6 +24,13 @@ public class Tehtava implements Serializable {
     }
 
     /**
+     * Asettaa luokan staattisen muuttujan tiettyyn arvoon
+     * @param idCounter kentän uusi arvo
+     */
+    protected static void setIdCounter(int idCounter) {
+        Tehtava.idCounter = idCounter;
+    }
+    /**
      * Asettaa tehtävän valmiiksi ja rekisteröi valmistumispäivän
      */
     public void teeValmiiksi() {

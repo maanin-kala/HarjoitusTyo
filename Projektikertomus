@@ -5,3 +5,6 @@ Hahmottelin myös luokkaa, joka hoitaa tehtävien tallentamisen ja lukemisen tie
 11.3. 15min
 Muokattu tehtävä luokkaa käyttämään LocalDatea Daten sijaan ja lisätty Serializable rajapinta
 
+11.3 15min
+Muokattu tehtävien lataamista tiedostosta, jotta Tehtava-luokan idCounter kenttä päivittyy oikeaksi.
+

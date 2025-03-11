@@ -10,7 +10,7 @@ public class Tehtavat {
      * Hakee ja lataa tehtävät luokassa määritellystä tiedostopolusta
      * @return ArrayList&lt;Tehtava>
      */
-    public static ArrayList<Tehtava> getTehtavat() {
+    public static ArrayList<Tehtava> lataa() {
         ArrayList<Tehtava> lista = new ArrayList<>();
 
         try (FileInputStream fis = new FileInputStream(tiedostoPolku);
@@ -18,6 +18,8 @@ public class Tehtavat {
             Object luettu = ois.readObject();
             if (luettu instanceof ArrayList<?>) {
                 lista = (ArrayList<Tehtava>) luettu;
+                System.out.println(lista.size() + " tehtävää ladattu tiedostosta");
+                Tehtava.setIdCounter(lista.size());
             }
         } catch (FileNotFoundException e) {
             System.out.println("Tiedostoa ei löytynyt");
@@ -31,10 +33,11 @@ public class Tehtavat {
      * Tallentaa tehtävälistan luokkaan määriteltyyn tiedostoon
      * @param lista ArrayList&lt;Tehtava>
      */
-    public static void tallennaTehtavat(ArrayList<Tehtava> lista) {
+    public static void tallenna(ArrayList<Tehtava> lista) {
         try (FileOutputStream fos = new FileOutputStream(tiedostoPolku);
              ObjectOutputStream oos = new ObjectOutputStream(fos)) {
             oos.writeObject(lista);
+            System.out.println("Tehtävät tallennettu");
         } catch (FileNotFoundException e) {
             System.out.println("Tiedostoa ei löytynyt");
         } catch (IOException e) {
