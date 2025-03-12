@@ -8,3 +8,5 @@ Muokattu tehtävä luokkaa käyttämään LocalDatea Daten sijaan ja lisätty Se
 11.3 15min
 Muokattu tehtävien lataamista tiedostosta, jotta Tehtava-luokan idCounter kenttä päivittyy oikeaksi.
 
+12.3. 30min
+Muokattu Tehtavat-luokkaa tarkoituksena luoda siitä instanssi ohjelmaa suorittaessa. Lisäksi lisätty toString metodi Tehtava luokkaan listviewiä ajatellen

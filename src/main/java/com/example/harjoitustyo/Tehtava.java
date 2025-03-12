@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 
 public class Tehtava implements Serializable {
-    private static int idCounter = 0;
+    private static int idCounter = 1;
 
     private final int id;
     private String otsikko;
@@ -30,12 +30,21 @@ public class Tehtava implements Serializable {
     protected static void setIdCounter(int idCounter) {
         Tehtava.idCounter = idCounter;
     }
+
     /**
      * Asettaa tehtävän valmiiksi ja rekisteröi valmistumispäivän
      */
     public void teeValmiiksi() {
         this.valmis = true;
         this.valmistumisPaiva = LocalDate.now();
+    }
+
+    /**
+     * ListViewiä varten toString() metodi
+     * @return tehtävän luontipäivä, otsikko, deadline
+     */
+    public String toString() {
+        return this.getLuontiPaiva() + ", " + this.getOtsikko() + ", " + this.getDeadline();
     }
 
     public int getId() {
