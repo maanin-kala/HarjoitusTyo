@@ -1,6 +1,7 @@
 package com.example.harjoitustyo;
 
 import java.io.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class Tehtavat {
@@ -37,11 +38,58 @@ public class Tehtavat {
     }
 
     /**
+     * Metodi, joka palauttaa keskeneräiset tehtävät
+     * @return tehtävälista
+     */
+    public ArrayList<Tehtava> getKeskeneraiset() {
+        ArrayList<Tehtava> palautus = new ArrayList<>();
+        for (Tehtava tehtava : tehtavat) {
+            if (!tehtava.isValmis()) {
+                palautus.add(tehtava);
+            }
+        }
+        return palautus;
+    }
+
+    /**
      * Lisää tehtävän listaan
      * @param tehtava lisättävä tehtävä
      */
     public void lisaa(Tehtava tehtava) {
         tehtavat.add(tehtava);
+    }
+
+    /**
+     * Muokkaa tehtävää
+     * @param tehtavanId Muokattavan tehtävän id
+     * @param otsikko Uusi otsikko
+     * @param kuvaus Uusi kuvaus
+     * @param deadline Uusi deadline
+     */
+    public void muokkaa(int tehtavanId, String otsikko, String kuvaus, LocalDate deadline) {
+        for (Tehtava tehtava : tehtavat) {
+            if (tehtava.getId() == tehtavanId) {
+                tehtava.setKuvaus(kuvaus);
+                tehtava.setOtsikko(otsikko);
+                tehtava.setDeadline(deadline);
+            }
+        }
+    }
+
+    /**
+     * Poistaa tehtävän
+     * @param tehtavanId poistettavan id
+     */
+    public void poista(int tehtavanId) {
+        int index = -1;
+        for (Tehtava tehtava : tehtavat) {
+            if (tehtava.getId() == tehtavanId) {
+                index = tehtavat.indexOf(tehtava);
+            }
+        }
+        if (index == -1) return;
+
+        tehtavat.remove(index);
     }
 
     /**

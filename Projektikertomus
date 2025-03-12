@@ -10,3 +10,6 @@ Muokattu tehtävien lataamista tiedostosta, jotta Tehtava-luokan idCounter kentt
 
 12.3. 30min
 Muokattu Tehtavat-luokkaa tarkoituksena luoda siitä instanssi ohjelmaa suorittaessa. Lisäksi lisätty toString metodi Tehtava luokkaan listviewiä ajatellen
+
+12.3. 30min
+Lisätty Tehtavat-luokkaan muokkaa, poista ja getKeskeneraiset metodit. Lisätty setteri Tehtava.deadline kentälle.

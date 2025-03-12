@@ -10,7 +10,7 @@ public class Tehtava implements Serializable {
     private String otsikko;
     private String kuvaus;
     private final LocalDate luontiPaiva;
-    private final LocalDate deadline;
+    private LocalDate deadline;
     private LocalDate valmistumisPaiva;
     private boolean valmis;
 
@@ -37,6 +37,11 @@ public class Tehtava implements Serializable {
     public void teeValmiiksi() {
         this.valmis = true;
         this.valmistumisPaiva = LocalDate.now();
+    }
+
+    public void teeKeskeneraiseksi() {
+        this.valmis = true;
+        this.valmistumisPaiva = null;
     }
 
     /**
@@ -81,5 +86,9 @@ public class Tehtava implements Serializable {
 
     public void setKuvaus(String kuvaus) {
         this.kuvaus = kuvaus;
+    }
+
+    public void setDeadline(LocalDate deadline) {
+        this.deadline = deadline;
     }
 }
