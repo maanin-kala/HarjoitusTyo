@@ -4,6 +4,11 @@ import java.io.Serializable;
 import java.time.LocalDate;
 
 public class Tehtava implements Serializable {
+    public static enum Status {
+            Valmis,
+            Kesken
+        }
+
     private static int idCounter = 1;
 
     private final int id;
@@ -12,7 +17,7 @@ public class Tehtava implements Serializable {
     private final LocalDate luontiPaiva;
     private LocalDate deadline;
     private LocalDate valmistumisPaiva;
-    private boolean valmis;
+    private Status tila;
 
     public Tehtava(String otsikko, String kuvaus, LocalDate deadline) {
         this.id = idCounter++;
@@ -20,7 +25,7 @@ public class Tehtava implements Serializable {
         this.kuvaus = kuvaus;
         this.luontiPaiva = LocalDate.now();
         this.deadline = deadline;
-        this.valmis = false;
+        this.tila = Status.Kesken;
     }
 
     /**
@@ -35,12 +40,15 @@ public class Tehtava implements Serializable {
      * Asettaa tehtävän valmiiksi ja rekisteröi valmistumispäivän
      */
     public void teeValmiiksi() {
-        this.valmis = true;
+        this.tila = Status.Valmis;
         this.valmistumisPaiva = LocalDate.now();
     }
 
+    /**
+     * Asettaa tehtävän takaisin keskeneräiseksi
+     */
     public void teeKeskeneraiseksi() {
-        this.valmis = true;
+        this.tila = Status.Kesken;
         this.valmistumisPaiva = null;
     }
 
@@ -48,8 +56,9 @@ public class Tehtava implements Serializable {
      * ListViewiä varten toString() metodi
      * @return tehtävän luontipäivä, otsikko, deadline
      */
+    protected static String toStringFormat = "%-15s %-100s %15s";
     public String toString() {
-        return this.getLuontiPaiva() + ", " + this.getOtsikko() + ", " + this.getDeadline();
+        return String.format(toStringFormat, luontiPaiva, otsikko, deadline);
     }
 
     public int getId() {
@@ -76,8 +85,8 @@ public class Tehtava implements Serializable {
         return valmistumisPaiva;
     }
 
-    public boolean isValmis() {
-        return valmis;
+    public Status getTila() {
+        return tila;
     }
 
     public void setOtsikko(String otsikko) {

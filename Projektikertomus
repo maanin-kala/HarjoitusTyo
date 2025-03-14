@@ -13,3 +13,7 @@ Muokattu Tehtavat-luokkaa tarkoituksena luoda siitä instanssi ohjelmaa suoritta
 
 12.3. 30min
 Lisätty Tehtavat-luokkaan muokkaa, poista ja getKeskeneraiset metodit. Lisätty setteri Tehtava.deadline kentälle.
+
+14.3. 2.30h
+Käyttöliittymän väsääminen aloitettu vauhdilla.
+Tehtava-luokan kenttä valmis vaihdettu enum Status tyypiksi
