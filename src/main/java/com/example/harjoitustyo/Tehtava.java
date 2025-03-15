@@ -4,9 +4,10 @@ import java.io.Serializable;
 import java.time.LocalDate;
 
 public class Tehtava implements Serializable {
-    public static enum Status {
-            Valmis,
-            Kesken
+    public enum Status {
+            Luotu,
+            Vaiheessa,
+            Valmis
         }
 
     private static int idCounter = 1;
@@ -25,7 +26,7 @@ public class Tehtava implements Serializable {
         this.kuvaus = kuvaus;
         this.luontiPaiva = LocalDate.now();
         this.deadline = deadline;
-        this.tila = Status.Kesken;
+        this.tila = Status.Luotu;
     }
 
     /**
@@ -37,28 +38,36 @@ public class Tehtava implements Serializable {
     }
 
     /**
-     * Asettaa tehtävän valmiiksi ja rekisteröi valmistumispäivän
+     * Asettaa tehtävän tilan ja valmistumisPaiva kentän
+     * @param tila
      */
-    public void teeValmiiksi() {
-        this.tila = Status.Valmis;
-        this.valmistumisPaiva = LocalDate.now();
+    public void setTila(Status tila) {
+        switch (tila) {
+            case Luotu:
+                this.tila = Status.Luotu;
+                this.valmistumisPaiva = null;
+                break;
+            case Vaiheessa:
+                this.tila = Status.Vaiheessa;
+                this.valmistumisPaiva = null;
+                break;
+            case Valmis:
+                if (this.tila == Status.Valmis) return; //Jos on jo valmis, ei tehdä mitään
+                this.tila = Status.Valmis;
+                this.valmistumisPaiva = LocalDate.now();
+        }
     }
 
-    /**
-     * Asettaa tehtävän takaisin keskeneräiseksi
-     */
-    public void teeKeskeneraiseksi() {
-        this.tila = Status.Kesken;
-        this.valmistumisPaiva = null;
+    public void setOtsikko(String otsikko) {
+        this.otsikko = otsikko;
     }
 
-    /**
-     * ListViewiä varten toString() metodi
-     * @return tehtävän luontipäivä, otsikko, deadline
-     */
-    protected static String toStringFormat = "%-15s %-100s %15s";
-    public String toString() {
-        return String.format(toStringFormat, luontiPaiva, otsikko, deadline);
+    public void setKuvaus(String kuvaus) {
+        this.kuvaus = kuvaus;
+    }
+
+    public void setDeadline(LocalDate deadline) {
+        this.deadline = deadline;
     }
 
     public int getId() {
@@ -87,17 +96,5 @@ public class Tehtava implements Serializable {
 
     public Status getTila() {
         return tila;
-    }
-
-    public void setOtsikko(String otsikko) {
-        this.otsikko = otsikko;
-    }
-
-    public void setKuvaus(String kuvaus) {
-        this.kuvaus = kuvaus;
-    }
-
-    public void setDeadline(LocalDate deadline) {
-        this.deadline = deadline;
     }
 }

@@ -17,3 +17,6 @@ Lisätty Tehtavat-luokkaan muokkaa, poista ja getKeskeneraiset metodit. Lisätty
 14.3. 2.30h
 Käyttöliittymän väsääminen aloitettu vauhdilla.
 Tehtava-luokan kenttä valmis vaihdettu enum Status tyypiksi
+
+15.3. 2h
+Käyttöliittymään tehtävän muokkaaminen, poistaminen ja uuden lisääminen. Status enumiin lisätty Vaiheessa -vaihtoehto

@@ -44,7 +44,7 @@ public class Tehtavat {
     public ArrayList<Tehtava> getKeskeneraiset() {
         ArrayList<Tehtava> palautus = new ArrayList<>();
         for (Tehtava tehtava : tehtavat) {
-            if (tehtava.getTila() == Tehtava.Status.Kesken) {
+            if (tehtava.getTila() != Tehtava.Status.Valmis) {
                 palautus.add(tehtava);
             }
         }
