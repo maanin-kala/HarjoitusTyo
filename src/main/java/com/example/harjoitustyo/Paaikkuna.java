@@ -3,6 +3,7 @@ package com.example.harjoitustyo;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -15,6 +16,7 @@ import javafx.stage.Stage;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 public class Paaikkuna extends Application {
     public static void main(String[] args) {
@@ -22,7 +24,12 @@ public class Paaikkuna extends Application {
     }
     //Ohjelman globaaleja asioita
     Tehtavat tehtavat = new Tehtavat();
+    DatePicker dpHaunAlkupvm;
+    DatePicker dpHaunLoppupvm;
+    TextField tfHakuteksti;
+    ComboBox<Tehtava.Status> cbValittuStatus;
     TableView<Tehtava> tvTehtavat =  new TableView<>();
+    Predicate<Tehtava> tehtavaFiltteri;
     TextField tfOtsikko;
     TextArea taKuvaus;
     DatePicker dpDeadline;
@@ -41,7 +48,28 @@ public class Paaikkuna extends Application {
      */
     void paivitaTehtavanakyma() {
         ObservableList<Tehtava> olTehtavat = FXCollections.observableList(tehtavat.get());
-        tvTehtavat.setItems(olTehtavat);
+        Tehtava.Status valittuStatus = cbValittuStatus.getValue();
+        String hakuteksti = tfHakuteksti.getText().toLowerCase();
+        LocalDate alkupvm = dpHaunAlkupvm.getValue();
+        LocalDate loppupvm = dpHaunLoppupvm.getValue();
+
+        tehtavaFiltteri = new Predicate<Tehtava>() {
+            @Override
+            public boolean test(Tehtava tehtava) {
+                if (valittuStatus != null && valittuStatus != tehtava.getTila()) {
+                    return false;
+                }
+                if (!tehtava.getOtsikko().toLowerCase().contains(hakuteksti) && !tehtava.getKuvaus().toLowerCase().contains(hakuteksti)) {
+                    return false;
+                }
+                if ((alkupvm != null && tehtava.getDeadline().isBefore(alkupvm)) || (loppupvm != null && tehtava.getDeadline().isAfter(loppupvm))) {
+                    return false;
+                }
+                return true;
+            }
+        };
+        FilteredList<Tehtava> flTehtavat = new FilteredList<>(olTehtavat, tehtavaFiltteri);
+        tvTehtavat.setItems(flTehtavat);
     }
 
     /**
@@ -56,11 +84,20 @@ public class Paaikkuna extends Application {
     }
 
     /**
+     * Nollaa hakukentät
+     */
+    void nollaaHakukentat() {
+        tfHakuteksti.clear();
+        cbValittuStatus.getSelectionModel().clearSelection();
+    }
+
+    /**
      * Asettaa valitun tehtävän tiedot kenttiin
      */
     void naytaTehtava() {
-        nollaaKentat();
         Tehtava valittu = tvTehtavat.getSelectionModel().getSelectedItem();
+        if (valittu == null) return;
+        nollaaKentat();
         tfOtsikko.setText(valittu.getOtsikko());
         taKuvaus.setText(valittu.getKuvaus());
         dpDeadline.setValue(valittu.getDeadline());
@@ -96,7 +133,7 @@ public class Paaikkuna extends Application {
         vahvistus.setHeaderText("Olet poistamassa tehtävää\n" + valittu.getOtsikko());
         Optional<ButtonType> vastaus = vahvistus.showAndWait();
         if (vastaus.isPresent() && vastaus.get() == bttKylla) {
-            tehtavat.poista(valittu.getId());
+            tehtavat.poista(valittu);
             tvTehtavat.refresh();
             nollaaKentat();
         }
@@ -123,7 +160,7 @@ public class Paaikkuna extends Application {
         kuvaus.setPrefRowCount(2);
         rt.addRow(1, new Label("Anna kuvaus"),  kuvaus);
 
-        DatePicker deadline = new DatePicker();
+        DatePicker deadline = new DatePicker(LocalDate.now().minusDays(1));
         rt.addRow(2, new Label("Anna deadline"),  deadline);
 
         Button lisaaTehtava = new Button("Lisää tehtävä");
@@ -166,9 +203,36 @@ public class Paaikkuna extends Application {
 
         //Yläreunan suodatusvalinnat
         HBox ylaPalkki = new HBox();
-        ylaPalkki.setAlignment(Pos.CENTER);
+        ylaPalkki.setAlignment(Pos.CENTER_RIGHT);
         ylaPalkki.setPadding(oletusPadding);
         ylaPalkki.setBorder(borderMusta);
+        ylaPalkki.setSpacing(5);
+
+        //Haku deadlinella
+        dpHaunAlkupvm = new DatePicker();
+        dpHaunAlkupvm.setMaxWidth(100);
+        dpHaunAlkupvm.valueProperty().addListener(e -> paivitaTehtavanakyma());
+        dpHaunLoppupvm = new DatePicker();
+        dpHaunLoppupvm.setMaxWidth(100);
+        dpHaunLoppupvm.valueProperty().addListener(e -> paivitaTehtavanakyma());
+        ylaPalkki.getChildren().addAll(new Label("Deadline välillä"), dpHaunAlkupvm, new Label("-"), dpHaunLoppupvm);
+
+        //Haku otsikosta ja kuvauksesta
+        tfHakuteksti = new TextField();
+        tfHakuteksti.textProperty().addListener(e-> paivitaTehtavanakyma());
+        ylaPalkki.getChildren().addAll(new Label("Haettava teksti:"), tfHakuteksti);
+
+        //Statuksella hakemista
+        cbValittuStatus = new ComboBox<>(FXCollections.observableList(Arrays.asList(Tehtava.Status.values())));
+        cbValittuStatus.getSelectionModel().selectedIndexProperty().addListener(e-> paivitaTehtavanakyma());
+        Button bResetValittuStatus = new Button("Nollaa");
+        bResetValittuStatus.setOnAction(e-> nollaaHakukentat());
+        ylaPalkki.getChildren().addAll(new Label("Status"), cbValittuStatus, bResetValittuStatus);
+
+//        Button bHae = new Button("Hae");
+//        bHae.setOnAction(e -> paivitaTehtavanakyma());
+//        ylaPalkki.getChildren().add(bHae);
+
         root.setTop(ylaPalkki);
 
 
@@ -177,18 +241,22 @@ public class Paaikkuna extends Application {
         TableColumn<Tehtava, String> tcLuontipaiva = new TableColumn<>("Luontipäivä");
         tcLuontipaiva.setMinWidth(100);
         tcLuontipaiva.setCellValueFactory(new PropertyValueFactory<>("luontiPaiva"));
+        tcLuontipaiva.setResizable(false);
 
         TableColumn<Tehtava, String> tcOtsikko = new TableColumn<>("Otsikko");
         tcOtsikko.setMinWidth(449);
         tcOtsikko.setCellValueFactory(new PropertyValueFactory<>("otsikko"));
+        tcOtsikko.setResizable(false);
 
         TableColumn<Tehtava, String> tcDeadline = new TableColumn<>("Deadline");
         tcDeadline.setMinWidth(100);
         tcDeadline.setCellValueFactory(new PropertyValueFactory<>("deadline"));
+        tcDeadline.setResizable(false);
 
         TableColumn<Tehtava, String> tcValmis = new TableColumn<>("Tehtävän tila");
         tcValmis.setMinWidth(100);
         tcValmis.setCellValueFactory(new PropertyValueFactory<>("tila"));
+        tcValmis.setResizable(false);
 
         tvTehtavat.getColumns().addAll(tcLuontipaiva, tcOtsikko, tcDeadline, tcValmis);
         tvTehtavat.setOnMouseClicked(e->naytaTehtava());

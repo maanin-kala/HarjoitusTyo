@@ -20,3 +20,6 @@ Tehtava-luokan kenttä valmis vaihdettu enum Status tyypiksi
 
 15.3. 2h
 Käyttöliittymään tehtävän muokkaaminen, poistaminen ja uuden lisääminen. Status enumiin lisätty Vaiheessa -vaihtoehto
+
+20.3. 1.30h
+Tehtäävänäkymän suodattamisen rakentaminen ja lievä testaus

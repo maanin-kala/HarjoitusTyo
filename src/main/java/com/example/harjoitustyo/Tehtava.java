@@ -38,8 +38,8 @@ public class Tehtava implements Serializable {
     }
 
     /**
-     * Asettaa tehtävän tilan ja valmistumisPaiva kentän
-     * @param tila
+     * Asettaa tehtävän tilan ja valmistumisPaiva kentän valmistumispäivään
+     * @param tila tehtävän uusi tila
      */
     public void setTila(Status tila) {
         switch (tila) {

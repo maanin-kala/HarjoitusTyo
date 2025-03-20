@@ -78,18 +78,10 @@ public class Tehtavat {
 
     /**
      * Poistaa tehtävän
-     * @param tehtavanId poistettavan id
+     * @param tehtava poistettava tehtava
      */
-    public void poista(int tehtavanId) {
-        int index = -1;
-        for (Tehtava tehtava : tehtavat) {
-            if (tehtava.getId() == tehtavanId) {
-                index = tehtavat.indexOf(tehtava);
-            }
-        }
-        if (index == -1) return;
-
-        tehtavat.remove(index);
+    public void poista(Tehtava tehtava) {
+        tehtavat.remove(tehtava);
     }
 
     /**
