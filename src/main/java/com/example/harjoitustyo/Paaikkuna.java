@@ -134,7 +134,7 @@ public class Paaikkuna extends Application {
         Optional<ButtonType> vastaus = vahvistus.showAndWait();
         if (vastaus.isPresent() && vastaus.get() == bttKylla) {
             tehtavat.poista(valittu);
-            tvTehtavat.refresh();
+            paivitaTehtavanakyma();
             nollaaKentat();
         }
     }
