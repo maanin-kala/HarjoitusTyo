@@ -18,30 +18,37 @@ import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Predicate;
 
+/**
+ * Ohjelman käyttöliittymä
+ * Luokasta ei tarkoitus tehdä olioita
+ */
 public class Paaikkuna extends Application {
+    /**
+     * Ohjelman entrypoint
+     * @param args komentoriviargumentit, ei käytössä
+     */
     public static void main(String[] args) {
         launch(args);
     }
+
     //Ohjelman globaaleja asioita
-    Tehtavat tehtavat = new Tehtavat();
-    DatePicker dpHaunAlkupvm;
-    DatePicker dpHaunLoppupvm;
-    TextField tfHakuteksti;
-    ComboBox<Tehtava.Status> cbValittuStatus;
-    TableView<Tehtava> tvTehtavat =  new TableView<>();
-    Predicate<Tehtava> tehtavaFiltteri;
-    TextField tfOtsikko;
-    TextArea taKuvaus;
-    DatePicker dpDeadline;
-    Button btLisaa, btPoista, btTallenna;
-    ComboBox<Tehtava.Status> cbStatus;
-    TextField tfValmistumisPaiva;
+    private Tehtavat tehtavat = new Tehtavat();
+    private DatePicker dpHaunAlkupvm;
+    private DatePicker dpHaunLoppupvm;
+    private TextField tfHakuteksti;
+    private ComboBox<Tehtava.Status> cbValittuStatus;
+    private TableView<Tehtava> tvTehtavat =  new TableView<>();
+    private TextField tfOtsikko;
+    private TextArea taKuvaus;
+    private DatePicker dpDeadline;
+    private ComboBox<Tehtava.Status> cbStatus;
+    private TextField tfValmistumisPaiva;
 
     //Tyylittelyvalintoja ohjelman käyttöön
-    Insets oletusPadding = new Insets(10);
-    ButtonType bttKylla = new ButtonType("Kyllä");
-    ButtonType bttEi = new ButtonType("Ei");
-    Border borderMusta = new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, new CornerRadii(10), BorderWidths.DEFAULT));
+    private final Insets oletusPadding = new Insets(10);
+    private final ButtonType bttKylla = new ButtonType("Kyllä");
+    private final ButtonType bttEi = new ButtonType("Ei");
+    private final Border borderMusta = new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, new CornerRadii(10), BorderWidths.DEFAULT));
 
     /**
      * Päivittää tvTehtavat valittujen suodatusvalintojen mukaisesti
@@ -53,7 +60,7 @@ public class Paaikkuna extends Application {
         LocalDate alkupvm = dpHaunAlkupvm.getValue();
         LocalDate loppupvm = dpHaunLoppupvm.getValue();
 
-        tehtavaFiltteri = new Predicate<Tehtava>() {
+        Predicate<Tehtava> tehtavaFiltteri = new Predicate<Tehtava>() {
             @Override
             public boolean test(Tehtava tehtava) {
                 if (valittuStatus != null && valittuStatus != tehtava.getTila()) {
@@ -78,17 +85,20 @@ public class Paaikkuna extends Application {
     void nollaaKentat() {
         tfOtsikko.clear();
         taKuvaus.clear();
-        dpDeadline.setValue(LocalDate.now());
+        dpDeadline.getEditor().clear();
         cbStatus.getSelectionModel().select(Tehtava.Status.Luotu);
         tfValmistumisPaiva.clear();
     }
 
     /**
-     * Nollaa hakukentät
+     * Nollaa yläpalkin hakukentät
      */
     void nollaaHakukentat() {
+        dpHaunAlkupvm.setValue(null);
+        dpHaunLoppupvm.setValue(null);
         tfHakuteksti.clear();
         cbValittuStatus.getSelectionModel().clearSelection();
+        paivitaTehtavanakyma();
     }
 
     /**
@@ -97,7 +107,6 @@ public class Paaikkuna extends Application {
     void naytaTehtava() {
         Tehtava valittu = tvTehtavat.getSelectionModel().getSelectedItem();
         if (valittu == null) return;
-        nollaaKentat();
         tfOtsikko.setText(valittu.getOtsikko());
         taKuvaus.setText(valittu.getKuvaus());
         dpDeadline.setValue(valittu.getDeadline());
@@ -108,7 +117,7 @@ public class Paaikkuna extends Application {
     }
 
     /**
-     * Tallentaa kenttien tiedot valittuun tehtävään
+     * Tallentaa kenttien tiedot valittuun tehtävään, käytetään tehtävän muutoksien tallentamiseen
      */
     void tallennaTehtava() {
         Tehtava valittu = tvTehtavat.getSelectionModel().getSelectedItem();
@@ -188,6 +197,10 @@ public class Paaikkuna extends Application {
         stage.show();
     }
 
+    /**
+     * Piirtää ohjelman pääikkunan
+     * @param primaryStage ohjelman päästage
+     */
     @Override
     public void start(Stage primaryStage) {
         //Ikkunamäärittelyt
@@ -229,10 +242,6 @@ public class Paaikkuna extends Application {
         bResetValittuStatus.setOnAction(e-> nollaaHakukentat());
         ylaPalkki.getChildren().addAll(new Label("Status"), cbValittuStatus, bResetValittuStatus);
 
-//        Button bHae = new Button("Hae");
-//        bHae.setOnAction(e -> paivitaTehtavanakyma());
-//        ylaPalkki.getChildren().add(bHae);
-
         root.setTop(ylaPalkki);
 
 
@@ -259,7 +268,7 @@ public class Paaikkuna extends Application {
         tcValmis.setResizable(false);
 
         tvTehtavat.getColumns().addAll(tcLuontipaiva, tcOtsikko, tcDeadline, tcValmis);
-        tvTehtavat.setOnMouseClicked(e->naytaTehtava());
+        tvTehtavat.getSelectionModel().selectedIndexProperty().addListener(e->naytaTehtava());
         tvTehtavat.setPlaceholder(new Label("Ei tehtäviä\nKokeile lisätä uusia!"));
         tehtavaNakyma.getChildren().add(tvTehtavat);
         tehtavaNakyma.setPadding(oletusPadding);
@@ -270,13 +279,13 @@ public class Paaikkuna extends Application {
         //Alapuolen toiminnallisuus
         int btnLeveys = 100;
         GridPane gpAlapalkki = new GridPane();
-        gpAlapalkki.setHgap(5);
+        gpAlapalkki.setHgap(28);
         gpAlapalkki.setVgap(5);
 
         Label lbOtsikko = new Label("Otsikko:");
         tfOtsikko = new TextField();
         tfOtsikko.setMinWidth(450);
-        btPoista = new Button("Poista");
+        Button btPoista = new Button("Poista");
         btPoista.setMinWidth(btnLeveys);
         btPoista.setOnAction(e->poistaTehtava());
         gpAlapalkki.addRow(0, lbOtsikko,  tfOtsikko, btPoista);
@@ -285,21 +294,21 @@ public class Paaikkuna extends Application {
         taKuvaus = new TextArea();
         taKuvaus.setMinWidth(450);
         taKuvaus.setPrefRowCount(2);
-        btLisaa = new Button("Lisää uusi");
+        Button btLisaa = new Button("Lisää uusi");
         btLisaa.setMinWidth(btnLeveys);
         btLisaa.setOnAction(e->lisaaTehtava());
-        gpAlapalkki.addRow(1,  lbKuvaus,  taKuvaus,  btLisaa);
+        gpAlapalkki.addRow(1,  lbKuvaus,  taKuvaus, btLisaa);
 
         Label lbDeadline = new Label("Deadline");
         HBox hbDeadlineJaTila = new HBox();
-        dpDeadline = new DatePicker(LocalDate.now());
+        dpDeadline = new DatePicker();
         cbStatus = new ComboBox<>(FXCollections.observableList(Arrays.asList(Tehtava.Status.values())));
         tfValmistumisPaiva = new TextField();
         tfValmistumisPaiva.setEditable(false);
         hbDeadlineJaTila.getChildren().addAll(dpDeadline, new Label("Valmistuspäivä"), tfValmistumisPaiva, new Label("Status"), cbStatus);
         hbDeadlineJaTila.setSpacing(5);
         hbDeadlineJaTila.setAlignment(Pos.CENTER_LEFT);
-        btTallenna = new Button("Tallenna");
+        Button btTallenna = new Button("Tallenna");
         btTallenna.setMinWidth(btnLeveys);
         btTallenna.setOnAction(e->tallennaTehtava());
         gpAlapalkki.addRow(2,  lbDeadline,  hbDeadlineJaTila, btTallenna);

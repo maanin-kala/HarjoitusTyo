@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"com.example.harjoitustyo","l":"Paaikkuna"},{"p":"com.example.harjoitustyo","l":"Tehtava.Status"},{"p":"com.example.harjoitustyo","l":"Tehtava"},{"p":"com.example.harjoitustyo","l":"Tehtavat"}];updateSearchResults();

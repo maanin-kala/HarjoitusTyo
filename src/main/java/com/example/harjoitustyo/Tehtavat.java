@@ -1,18 +1,21 @@
 package com.example.harjoitustyo;
 
 import java.io.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 
+/**
+ * Luokka, joka hoitaa tehtävien lukemisen ja kirjoittamisen tiedostoon
+ */
 public class Tehtavat {
     //Polku datatiedostoon
     private final String tiedostoPolku = "tehtavat.dat";
 
     //Tehtävälista
-    private ArrayList<Tehtava> tehtavat = new ArrayList<Tehtava>();
+    private ArrayList<Tehtava> tehtavat = new ArrayList<>();
 
     /**
-     * Hakee ja lataa tehtävät luokassa määritellystä tiedostopolusta
+     * Luo Tehtavat olion, joka sisältää ohjelmassa käsiteltävät tehtävät
+     * Hakee automaattisesti tiedostosta tehtävät, mikäli niitä on.
      */
     public Tehtavat() {
         try (FileInputStream fis = new FileInputStream(tiedostoPolku);
@@ -31,25 +34,13 @@ public class Tehtavat {
     }
 
     /**
+     * Palauttaa tehtävälistan
      * @return tehtävälistan
      */
     public ArrayList<Tehtava> get() {
         return tehtavat;
     }
 
-    /**
-     * Metodi, joka palauttaa keskeneräiset tehtävät
-     * @return tehtävälista
-     */
-    public ArrayList<Tehtava> getKeskeneraiset() {
-        ArrayList<Tehtava> palautus = new ArrayList<>();
-        for (Tehtava tehtava : tehtavat) {
-            if (tehtava.getTila() != Tehtava.Status.Valmis) {
-                palautus.add(tehtava);
-            }
-        }
-        return palautus;
-    }
 
     /**
      * Lisää tehtävän listaan
@@ -59,22 +50,6 @@ public class Tehtavat {
         tehtavat.add(tehtava);
     }
 
-    /**
-     * Muokkaa tehtävää
-     * @param tehtavanId Muokattavan tehtävän id
-     * @param otsikko Uusi otsikko
-     * @param kuvaus Uusi kuvaus
-     * @param deadline Uusi deadline
-     */
-    public void muokkaa(int tehtavanId, String otsikko, String kuvaus, LocalDate deadline) {
-        for (Tehtava tehtava : tehtavat) {
-            if (tehtava.getId() == tehtavanId) {
-                tehtava.setKuvaus(kuvaus);
-                tehtava.setOtsikko(otsikko);
-                tehtava.setDeadline(deadline);
-            }
-        }
-    }
 
     /**
      * Poistaa tehtävän

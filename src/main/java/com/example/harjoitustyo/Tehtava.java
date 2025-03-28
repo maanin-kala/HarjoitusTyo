@@ -3,7 +3,13 @@ package com.example.harjoitustyo;
 import java.io.Serializable;
 import java.time.LocalDate;
 
+/**
+ * Ohjelman perustietoluokka
+ */
 public class Tehtava implements Serializable {
+    /**
+     * Enum tehtävän tilan seuraamiseen
+     */
     public enum Status {
             Luotu,
             Vaiheessa,
@@ -20,6 +26,12 @@ public class Tehtava implements Serializable {
     private LocalDate valmistumisPaiva;
     private Status tila;
 
+    /**
+     * Luo uuden tehtävän
+     * @param otsikko Tehtävän otsikko
+     * @param kuvaus Tehtävän kuvaus
+     * @param deadline Tehtävän deadline
+     */
     public Tehtava(String otsikko, String kuvaus, LocalDate deadline) {
         this.id = idCounter++;
         this.otsikko = otsikko;
