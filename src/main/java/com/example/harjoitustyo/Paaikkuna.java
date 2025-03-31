@@ -187,6 +187,7 @@ public class Paaikkuna extends Application {
                 tehtavat.lisaa(new Tehtava(otsikko.getText(), kuvaus.getText(), deadline.getValue()));
                 stage.close();
                 paivitaTehtavanakyma();
+                nollaaHakukentat();
             }
         });
 
@@ -237,6 +238,8 @@ public class Paaikkuna extends Application {
 
         //Statuksella hakemista
         cbValittuStatus = new ComboBox<>(FXCollections.observableList(Arrays.asList(Tehtava.Status.values())));
+        cbValittuStatus.setBackground(new Background(new BackgroundFill(Color.WHITE, new CornerRadii(5), null)));
+        cbValittuStatus.setBorder(new Border(new BorderStroke(Color.LIGHTGRAY, BorderStrokeStyle.SOLID, null, BorderWidths.DEFAULT)));
         cbValittuStatus.getSelectionModel().selectedIndexProperty().addListener(e-> paivitaTehtavanakyma());
         Button bResetValittuStatus = new Button("Nollaa");
         bResetValittuStatus.setOnAction(e-> nollaaHakukentat());
@@ -247,8 +250,9 @@ public class Paaikkuna extends Application {
 
         //ListView keskelle
         VBox tehtavaNakyma = new VBox();
-        TableColumn<Tehtava, String> tcLuontipaiva = new TableColumn<>("Luontipäivä");
+        TableColumn<Tehtava, LocalDate> tcLuontipaiva = new TableColumn<>("Luontipäivä");
         tcLuontipaiva.setMinWidth(100);
+        tcLuontipaiva.setCellFactory(_ -> new PaivamaaraTableCell());
         tcLuontipaiva.setCellValueFactory(new PropertyValueFactory<>("luontiPaiva"));
         tcLuontipaiva.setResizable(false);
 
@@ -257,8 +261,9 @@ public class Paaikkuna extends Application {
         tcOtsikko.setCellValueFactory(new PropertyValueFactory<>("otsikko"));
         tcOtsikko.setResizable(false);
 
-        TableColumn<Tehtava, String> tcDeadline = new TableColumn<>("Deadline");
+        TableColumn<Tehtava, LocalDate> tcDeadline = new TableColumn<>("Deadline");
         tcDeadline.setMinWidth(100);
+        tcDeadline.setCellFactory(_ -> new PaivamaaraTableCell());
         tcDeadline.setCellValueFactory(new PropertyValueFactory<>("deadline"));
         tcDeadline.setResizable(false);
 
