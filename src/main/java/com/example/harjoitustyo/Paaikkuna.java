@@ -14,6 +14,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -112,7 +113,9 @@ public class Paaikkuna extends Application {
         dpDeadline.setValue(valittu.getDeadline());
         cbStatus.getSelectionModel().select(valittu.getTila());
         if (valittu.getTila() == Tehtava.Status.Valmis) {
-            tfValmistumisPaiva.setText(valittu.getValmistumisPaiva().toString());
+            tfValmistumisPaiva.setText(valittu.getValmistumisPaiva().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
+        } else {
+            tfValmistumisPaiva.setText("");
         }
     }
 
