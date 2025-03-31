@@ -26,3 +26,6 @@ Tehtäävänäkymän suodattamisen rakentaminen ja lievä testaus
 
 28.3. 1h
 Lisää testausta ja JavaDoccien työstämistä. Sisältää yhden rivin korjauksia ohjelmaan sinne tänne.
+
+31.3. 30min
+Muokattu TableViewin Luontipäivä ja Deadline kenttien formaatti näyttämään paremmalta (Tehty custom TableCell luokka)
