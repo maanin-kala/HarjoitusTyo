@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 /**
- * Kustomoitu TableCell, joka muokkaa sen sisältämän LocalDaten hienompaan muotoon
+ * Kustomoitu TableCell, joka muokkaa sen sisältämän LocalDaten muotoon dd.MM.yyyy
  */
 public class PaivamaaraTableCell extends TableCell<Tehtava, LocalDate> {
     public PaivamaaraTableCell() {}
